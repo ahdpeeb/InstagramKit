@@ -242,7 +242,9 @@
 {
     NSMutableDictionary *mutableDictionary = [NSMutableDictionary dictionaryWithDictionary:params];
     if (self.accessToken) {
-        [mutableDictionary setObject:self.accessToken forKey:kKeyAccessToken];
+        if (![mutableDictionary objectForKey:kKeyAccessToken]) {
+            [mutableDictionary setObject:self.accessToken forKey:kKeyAccessToken];
+        }
     }
     else
     {
@@ -508,6 +510,27 @@
                                     andPaginationKey:kPaginationKeyMaxId];
     [self getPaginatedPath:[NSString stringWithFormat:@"users/%@/media/recent",userId]
                 parameters:params
+             responseModel:[InstagramMedia class]
+                   success:success
+                   failure:failure];
+}
+
+- (void)getMediaForUser:(NSString *)userId
+                  token:(NSString *)userToken
+                  count:(NSInteger)count
+                  maxId:(nullable NSString *)maxId
+            withSuccess:(InstagramMediaBlock)success
+                failure:(nullable InstagramFailureBlock)failure
+{
+    NSDictionary *params = [self parametersFromCount:count
+                                               maxId:maxId
+                                    andPaginationKey:kPaginationKeyMaxId];
+    
+    NSMutableDictionary *mutableParams = [NSMutableDictionary dictionaryWithDictionary:params];
+    [mutableParams setObject:userToken forKey:kKeyAccessToken];
+    
+    [self getPaginatedPath:[NSString stringWithFormat:@"users/%@/media/recent",userId]
+                parameters:mutableParams
              responseModel:[InstagramMedia class]
                    success:success
                    failure:failure];

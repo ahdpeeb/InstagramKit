@@ -254,6 +254,12 @@ NS_ASSUME_NONNULL_BEGIN
             withSuccess:(InstagramMediaBlock)success
                 failure:(nullable InstagramFailureBlock)failure;
 
+- (void)getMediaForUser:(NSString *)userId
+                  token:(NSString *)userToken
+                  count:(NSInteger)count
+                  maxId:(nullable NSString *)maxId
+            withSuccess:(InstagramMediaBlock)success
+                failure:(nullable InstagramFailureBlock)failure;
 
 #pragma mark -
 
